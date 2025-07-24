@@ -1,66 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add Worker</title>
-  <style>
-    input, select { width: 100%; margin: 10px 0; padding: 10px; }
-    body { padding: 40px; font-family: sans-serif; }
-    form { max-width: 600px; margin: auto; }
-    button { background: dodgerblue; color: white; padding: 10px; border: none; width: 100%; border-radius: 5px; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h2>Worker Details</h2>
-  <form id="workerForm">
-    <input placeholder="Name" id="name" required>
-    <input placeholder="Employer" id="employer">
-    <input placeholder="Work Permit Number" id="workPermitNumber">
-    <input placeholder="FIN Number" id="finNumber">
-    <input placeholder="Sector" id="sector">
-    <input type="date" id="dob" placeholder="Date of Birth">
-    <input type="date" id="applicationDate" placeholder="Date of Application">
-    <input type="date" id="approvalDate" placeholder="Date of Approval">
-    <input type="date" id="expiryDate" placeholder="Date of Expiry">
-    <input placeholder="Nationality" id="nationality">
-    <input placeholder="Certificates" id="certificates">
-    <select id="certificateType">
-      <option>Select Certificate Type</option>
-      <option>CSOC</option>
-      <option>BCSS</option>
-    </select>
-    <input placeholder="CSOC No" id="csocNo">
-    <input type="date" id="csocDate">
-    <input placeholder="BCSS No" id="bcssNo">
-    <button type="submit">Submit</button>
-  </form>
-
+  <div class="container">
+    <form id="workerForm">
+      <h2>Add Worker</h2>
+      <div class="grid">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="text" name="employer" placeholder="Employer" required />
+        <input type="text" name="permitNumber" placeholder="Work Permit Number" required />
+        <input type="text" name="sector" placeholder="Sector" required />
+        <input type="date" name="dob" placeholder="Date of Birth" required />
+        <input type="text" name="fin" placeholder="FIN Number" required />
+        <input type="date" name="approvalDate" placeholder="Date of Approval" required />
+        <input type="date" name="applicationDate" placeholder="Date of Application" required />
+        <input type="text" name="nationality" placeholder="Nationality" required />
+        <input type="text" name="certificates" placeholder="Certificates" />
+        <select name="certificateType" required>
+          <option value="">Select Certificate Type</option>
+          <option value="Safety">Safety</option>
+          <option value="Trade">Trade</option>
+        </select>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
   <script>
-    document.getElementById('workerForm').addEventListener('submit', async (e) => {
+    const form = document.getElementById('workerForm');
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = {
-        name: name.value,
-        employer: employer.value,
-        workPermitNumber: workPermitNumber.value,
-        finNumber: finNumber.value,
-        sector: sector.value,
-        dob: dob.value,
-        applicationDate: applicationDate.value,
-        approvalDate: approvalDate.value,
-        expiryDate: expiryDate.value,
-        nationality: nationality.value,
-        certificates: certificates.value,
-        certificateType: certificateType.value,
-        csocNo: csocNo.value,
-        csocDate: csocDate.value,
-        bcssNo: bcssNo.value
-      };
-      const res = await fetch("http://localhost:5000/api/workers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+      const data = Object.fromEntries(new FormData(form).entries());
+      const res = await fetch('https://worker-backend.onrender.com/api/workers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
-      const result = await res.json();
-      alert(result.message);
+      alert(res.ok ? 'Worker Added' : 'Error Adding Worker');
+      form.reset();
     });
   </script>
 </body>
