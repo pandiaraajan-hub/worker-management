@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Worker</title>
+  <style>
+    input, select { width: 100%; margin: 10px 0; padding: 10px; }
+    body { padding: 40px; font-family: sans-serif; }
+    form { max-width: 600px; margin: auto; }
+    button { background: dodgerblue; color: white; padding: 10px; border: none; width: 100%; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Worker Details</h2>
+  <form id="workerForm">
+    <input placeholder="Name" id="name" required>
+    <input placeholder="Employer" id="employer">
+    <input placeholder="Work Permit Number" id="workPermitNumber">
+    <input placeholder="FIN Number" id="finNumber">
+    <input placeholder="Sector" id="sector">
+    <input type="date" id="dob" placeholder="Date of Birth">
+    <input type="date" id="applicationDate" placeholder="Date of Application">
+    <input type="date" id="approvalDate" placeholder="Date of Approval">
+    <input type="date" id="expiryDate" placeholder="Date of Expiry">
+    <input placeholder="Nationality" id="nationality">
+    <input placeholder="Certificates" id="certificates">
+    <select id="certificateType">
+      <option>Select Certificate Type</option>
+      <option>CSOC</option>
+      <option>BCSS</option>
+    </select>
+    <input placeholder="CSOC No" id="csocNo">
+    <input type="date" id="csocDate">
+    <input placeholder="BCSS No" id="bcssNo">
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById('workerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        name: name.value,
+        employer: employer.value,
+        workPermitNumber: workPermitNumber.value,
+        finNumber: finNumber.value,
+        sector: sector.value,
+        dob: dob.value,
+        applicationDate: applicationDate.value,
+        approvalDate: approvalDate.value,
+        expiryDate: expiryDate.value,
+        nationality: nationality.value,
+        certificates: certificates.value,
+        certificateType: certificateType.value,
+        csocNo: csocNo.value,
+        csocDate: csocDate.value,
+        bcssNo: bcssNo.value
+      };
+      const res = await fetch("http://localhost:5000/api/workers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      alert(result.message);
+    });
+  </script>
+</body>
+</html>
